@@ -4,7 +4,8 @@ const Agendamento = require('./Agendamento')
 
 Cliente.hasMany(Console, {
     foreignKey: 'idCliente',
-    as: 'ConsoleCliente'
+    as: 'ConsoleCliente',
+    onDelete: 'CASCADE'
 })
 
 Console.belongsTo(Cliente, {
@@ -14,7 +15,8 @@ Console.belongsTo(Cliente, {
 
 Cliente.hasMany(Agendamento, {
     foreignKey: 'idCliente',
-    as: 'AgendamentoCliente'
+    as: 'AgendamentoCliente',
+    onDelete: 'CASCADE'
 })
 
 Agendamento.belongsTo(Cliente, {
@@ -24,7 +26,8 @@ Agendamento.belongsTo(Cliente, {
 
 Console.hasMany(Agendamento, {
     foreignKey: 'idConsole',
-    as: 'AgendamentoConsole'
+    as: 'AgendamentoConsole',
+    onDelete: 'CASCADE'
 })
 
 Agendamento.belongsTo(Console, {
@@ -32,4 +35,4 @@ Agendamento.belongsTo(Console, {
     as: 'ConsoleAgendamento'
 })
 
-module.expost = { Cliente, Console, Agendamento }
+module.exports = { Cliente, Console, Agendamento }

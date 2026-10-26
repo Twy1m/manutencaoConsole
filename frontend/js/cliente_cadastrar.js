@@ -1,29 +1,33 @@
-const btn_cadastrar = document.getElementById('btn_cadastrar')
-const resposta = document.getElementById('resposta')
+const nome = document.getElementById("nome")
+const email = document.getElementById("email")
+const senha = document.getElementById("senha")
+const cpf = document.getElementById("cpf")
+const telefone = document.getElementById("telefone")
 
-btn_cadastrar.addEventListener('click', (e) => {
-    e.preventDefault()
+const res = document.getElementById("resposta")
 
-    const valores = {
-        nome: document.getElementById('nome').value,
-        email: document.getElementById('email').value,
-        senha: document.getElementById('senha').value,
-        cpf: document.getElementById('cpf').value,
-        endereco: document.getElementById('endereco').value
-    }
+document.querySelector("form").addEventListener("submit", async (event) => {
+	event.preventDefault()
 
-    fetch('http://localhost:3000/cliente', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(valores)
-    })
-    .then(res => res.json())
-    .then(dados => {
-        resposta.innerHTML = `<p>${dados.message}</p>`
-        document.querySelector('form').reset()
-    })
-    .catch(err => {
-        console.error('Erro ao cadastrar cliente:', err)
-        resposta.innerHTML = '<p>Erro ao tentar conectar com o servidor.</p>'
-    })
+	try {
+		const payload = {
+			nome: nome.value,
+			email: email.value,
+			senha: senha.value,
+			cpf: cpf.value,
+			telefone: telefone.value
+		}
+
+		const resposta = await fetch("http://localhost:3000/cliente", {
+			body: JSON.stringify(payload),
+			headers: { "Content-Type": "application/json" },
+			method: "POST"
+		})
+		const dados = await resposta.json()
+
+		res.innerText = dados.message
+		if (resposta.ok) event.target.reset()
+	} catch (error) {
+		res.innerText = error.message || "Erro ao cadastrar"
+	}
 })

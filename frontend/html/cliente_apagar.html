@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/cliente_apagar.js" defer></script>
+    <title>Apagar Cliente - PixelFix</title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="../index.html">Home</a>&emsp;&emsp;
+
+            <span class="titulo_menu">Clientes</span>&emsp;
+            <a href="../html/cliente_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/cliente_listar.html">Listar</a>&emsp;
+            <a href="../html/cliente_consultar.html">Consultar</a>&emsp;
+            <a href="../html/cliente_atualizar.html">Atualizar</a>&emsp;
+            <a href="../html/cliente_apagar.html">Apagar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Consoles</span>&emsp;
+            <a href="../html/console_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/console_listar.html">Listar / Consultar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Agendamentos</span>&emsp;
+            <a href="../html/agendamento_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/agendamento_listar.html">Listar</a>&emsp;
+            <a href="../html/agendamento_atualizar.html">Atualizar</a>
+            <br><br><hr><br>
+        </nav>
+    </header>
+    <main>
+        <h1>Apagar Cliente</h1>
+        <br><br>
+        <form>
+            <label for="codCliente">Código do Cliente</label><br>
+            <input type="number" id="codCliente" min="1"><br><br>
+            <button id="btn_apagar">Apagar</button><br><br><br>
+        </form>
+        <div id="resposta" class="resposta"></div>
+    </main>
+</body>
+</html>

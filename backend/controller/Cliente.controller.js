@@ -9,9 +9,13 @@ const cadastrar = async (req, res) => {
     }
 
     try {
+        // cliente duplicado
+        if (await Cliente.findOne({ where: { email: email } })) {
+            return res.status(409).json({ message: 'já existe um cliente com esse e-mail' })
+        }
 
-        const senhaCripto = CryptoJs.AES.encrypt(senha, "senha")
-        const cpfCripto = CryptoJs.AES.encrypt(cpf, "senha")
+        const senhaCripto = CryptoJs.AES.encrypt(senha, "segredo").toString()
+        const cpfCripto = CryptoJs.AES.encrypt(cpf, "segredo").toString()
 
         await Cliente.create({
             nome: nome,
@@ -31,16 +35,9 @@ const cadastrar = async (req, res) => {
 
 const listar = async (req, res) => {
     try {
-        let usuarios = await Cliente.findAll({ attributes: { exclude: ["senha"] } })
+        const clientes = await Cliente.findAll({ attributes: { exclude: ["senha", "cpf"] } })
 
-        usuarios.forEach(el => {
-            el.cpf = CryptoJs.AES.decrypt(el.cpf, "senha").toString(CryptoJs.enc.Utf8)
-            usuarios[el] = {
-                ...usuarios,
-                cpf: el.cpf
-            }
-        });
-        res.status(200).json(usuarios)
+        res.status(200).json(clientes)
     } catch (err) {
         console.log(err)
         return res.status(500).json({ message: 'Erro ao listar clientes!' })
@@ -59,19 +56,14 @@ const buscar = async (req, res) => {
             return res.status(404).json({ message: 'usuario não encontrado' })
         }
 
-        cliente.forEach(el => {
-            el.cpf = CryptoJs.AES.decrypt(el.cpf, "senha").toString(CryptoJs.enc.Utf8)
-            cliente[el] = {
-                ...cliente,
-                cpf: el.cpf
-            }
-        });
+        // o cpf volta descriptografado
+        cliente.cpf = CryptoJs.AES.decrypt(cliente.cpf, "segredo").toString(CryptoJs.enc.Utf8)
 
         res.status(200).json(cliente)
 
     } catch (err) {
         console.log(err)
-        return res.status(500).json({ message: 'Erro ao listar clientes!' })
+        return res.status(500).json({ message: 'Erro ao buscar cliente!' })
     }
 }
 
@@ -90,7 +82,10 @@ const atualizar = async (req, res) => {
         const cliente = await Cliente.findByPk(id)
         if (!cliente) return res.status(404).json({ message: "usuário não encontrado" })
 
-        await cliente.update({ nome, email, senha, cpf, telefone })
+        const senhaCripto = CryptoJs.AES.encrypt(senha, "segredo").toString()
+        const cpfCripto = CryptoJs.AES.encrypt(cpf, "segredo").toString()
+
+        await cliente.update({ nome, email, senha: senhaCripto, cpf: cpfCripto, telefone })
 
         return res.status(200).json({ message: "usuário atualizado com sucesso" })
     } catch (err) {
@@ -114,7 +109,7 @@ const apagar = async (req, res) => {
         return res.status(200).json({ message: "usuário apagado com sucesso" })
     } catch (err) {
         console.error(err)
-        return res.status(500).json({ message: "erro ao atualizar cliente" })
+        return res.status(500).json({ message: "erro ao apagar cliente" })
     }
 }
 

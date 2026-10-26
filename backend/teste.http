@@ -1,10 +1,9 @@
-### Teste da Rota Raíz
+### Testes da API PixelFix (REST Client)
+
+### Teste da Rota Raiz
 GET http://localhost:3000/
-Content-Type: application/json
 
-###
-
-### 1. Cadastrar Cliente 
+### 1. Cadastrar Cliente (pública)
 POST http://localhost:3000/cliente
 Content-Type: application/json
 
@@ -13,37 +12,195 @@ Content-Type: application/json
   "email": "carlos@gmail.com",
   "senha": "abc",
   "cpf": "12345678901",
-  "endereco": "Rua Lages, 123"
+  "telefone": "47999990001"
 }
 
-###
-
-### 2. Listar Clientes
-GET http://localhost:3000/clientes
-Authorization: token
+### 1.1 Cadastrar outro Cliente
+POST http://localhost:3000/cliente
 Content-Type: application/json
 
-###
+{
+  "nome": "Ana",
+  "email": "ana@gmail.com",
+  "senha": "123",
+  "cpf": "98765432100",
+  "telefone": "47988880002"
+}
 
-### 3. Cadastrar Console
+### 1.2 Cliente com e-mail repetido -> 409
+POST http://localhost:3000/cliente
+Content-Type: application/json
+
+{
+  "nome": "Carlos 2",
+  "email": "carlos@gmail.com",
+  "senha": "abc",
+  "cpf": "11111111111",
+  "telefone": "47900000000"
+}
+
+### 1.3 Cliente com campos faltando -> 400
+POST http://localhost:3000/cliente
+Content-Type: application/json
+
+{ "nome": "Sem dados" }
+
+### 2. Login com senha errada -> 401
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "carlos@gmail.com", "senha": "errada" }
+
+### 2.1 Login com e-mail que não existe -> 401
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "naoexiste@gmail.com", "senha": "abc" }
+
+### 2.2 Login correto -> 200 + token (expira em 90 minutos)
+# @name login
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{ "email": "carlos@gmail.com", "senha": "abc" }
+
+@token = {{login.response.body.token}}
+
+### 3. Rota privada sem token -> 401
+GET http://localhost:3000/clientes
+
+### 4. Listar Clientes
+GET http://localhost:3000/clientes
+Authorization: {{token}}
+
+### 5. Consultar Cliente por código (cpf volta descriptografado)
+GET http://localhost:3000/cliente/1
+Authorization: {{token}}
+
+### 6. Atualizar Cliente
+PUT http://localhost:3000/cliente/2
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Ana Souza",
+  "email": "ana@gmail.com",
+  "senha": "123",
+  "cpf": "98765432100",
+  "telefone": "47977770000"
+}
+
+### 7. Apagar Cliente (apaga também consoles e agendamentos)
+DELETE http://localhost:3000/cliente/3
+Authorization: {{token}}
+
+### 8. Cadastrar Console (número de série fica criptografado)
 POST http://localhost:3000/console
-Authorization: token
+Authorization: {{token}}
 Content-Type: application/json
 
 {
   "modelo": "PlayStation 5",
-  "marca": "Sony"
+  "marca": "Sony",
+  "numeroSerie": "SN-PS5-0001",
+  "servico": "Troca de pasta térmica",
+  "idCliente": 1
 }
 
-###
+### 8.1 Cadastrar outro Console
+POST http://localhost:3000/console
+Authorization: {{token}}
+Content-Type: application/json
 
-### 4. Cadastrar Agendamento
+{
+  "modelo": "Nintendo Switch",
+  "marca": "Nintendo",
+  "numeroSerie": "SN-NSW-0002",
+  "servico": "Troca de joystick",
+  "idCliente": 2
+}
+
+### 8.2 Console com cliente inexistente -> 404
+POST http://localhost:3000/console
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "modelo": "Xbox",
+  "marca": "Microsoft",
+  "numeroSerie": "SN-XB-0003",
+  "servico": "Limpeza",
+  "idCliente": 999
+}
+
+### 9. Listar Consoles
+GET http://localhost:3000/consoles
+Authorization: {{token}}
+
+### 9.1 Consultar Console por termo (número de série ou código)
+GET http://localhost:3000/console/buscar/NSW
+Authorization: {{token}}
+
+### 10. Cadastrar Agendamento
 POST http://localhost:3000/agendamento
-Authorization: token
+Authorization: {{token}}
 Content-Type: application/json
 
 {
   "data": "2026-11-10",
-  "hora": "14:30:00",
-  "tipoServico": "Limpeza e troca de pasta térmica"
+  "hora": "14:30",
+  "idCliente": 1,
+  "idConsole": 1
+}
+
+### 10.1 Outro Agendamento (data anterior, para testar a ordenação)
+POST http://localhost:3000/agendamento
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "data": "2026-11-05",
+  "hora": "09:00",
+  "idCliente": 2,
+  "idConsole": 2
+}
+
+### 10.2 Mesmo dia e horário -> 409
+POST http://localhost:3000/agendamento
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "data": "2026-11-10",
+  "hora": "14:30",
+  "idCliente": 1,
+  "idConsole": 1
+}
+
+### 10.3 Console de outro cliente -> 400
+POST http://localhost:3000/agendamento
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "data": "2026-11-11",
+  "hora": "10:00",
+  "idCliente": 1,
+  "idConsole": 2
+}
+
+### 11. Listar Agendamentos (ordenados por data)
+GET http://localhost:3000/agendamentos
+Authorization: {{token}}
+
+### 12. Atualizar Agendamento
+PUT http://localhost:3000/agendamento/1
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+  "data": "2026-11-20",
+  "hora": "16:00",
+  "idCliente": 1,
+  "idConsole": 1
 }

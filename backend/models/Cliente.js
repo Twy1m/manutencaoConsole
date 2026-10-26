@@ -22,6 +22,10 @@ const Cliente = db.define('cliente', {
     email: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    telefone: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
     timestamps: false,

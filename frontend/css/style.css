@@ -96,3 +96,15 @@ th, td {
     text-align: center;
     color: white;
 }
+
+.area_usuario {
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 1.4rem;
+    margin-bottom: 16px;
+}
+
+option {
+    background-color: black;
+    color: white;
+}

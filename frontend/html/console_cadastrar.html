@@ -3,25 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <script src="../js/console_cadastrar.js" defer></script>
     <title>Cadastrar Console - PixelFix</title>
 </head>
 <body>
     <header>
-        <nav><a href="../index.html">Home</a></nav>
-        <br><hr><br>
+        <nav>
+            <a href="../index.html">Home</a>&emsp;&emsp;
+
+            <span class="titulo_menu">Clientes</span>&emsp;
+            <a href="../html/cliente_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/cliente_listar.html">Listar</a>&emsp;
+            <a href="../html/cliente_consultar.html">Consultar</a>&emsp;
+            <a href="../html/cliente_atualizar.html">Atualizar</a>&emsp;
+            <a href="../html/cliente_apagar.html">Apagar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Consoles</span>&emsp;
+            <a href="../html/console_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/console_listar.html">Listar / Consultar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Agendamentos</span>&emsp;
+            <a href="../html/agendamento_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/agendamento_listar.html">Listar</a>&emsp;
+            <a href="../html/agendamento_atualizar.html">Atualizar</a>
+            <br><br><hr><br>
+        </nav>
     </header>
     <main>
         <h1>Cadastrar Console</h1>
+        <br><br>
         <form>
-            <label for="modelo">Modelo</label><br>
+            <label for="idCliente">Cliente (dono do console)</label><br>
+            <select id="idCliente"><option value="">Selecione o cliente</option></select><br><br>
+            <label for="modelo">Modelo (ex: PlayStation 5)</label><br>
             <input type="text" id="modelo" required><br><br>
-
             <label for="marca">Marca (ex: Sony, Nintendo)</label><br>
             <input type="text" id="marca" required><br><br>
-
-            <button id="btn_cadastrar">Cadastrar</button>
+            <label for="numeroSerie">Número de série</label><br>
+            <input type="text" id="numeroSerie" required><br><br>
+            <label for="servico">Tipo de serviço</label><br>
+            <input type="text" id="servico" required><br><br>
+            <button id="btn_cadastrar">Cadastrar</button><br><br><br>
         </form>
         <div id="resposta" class="resposta"></div>
     </main>

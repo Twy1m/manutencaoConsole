@@ -9,22 +9,42 @@
 </head>
 <body>
     <header>
-        <nav><a href="../index.html">Home</a></nav>
-        <br><hr><br>
+        <nav>
+            <a href="../index.html">Home</a>&emsp;&emsp;
+
+            <span class="titulo_menu">Clientes</span>&emsp;
+            <a href="../html/cliente_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/cliente_listar.html">Listar</a>&emsp;
+            <a href="../html/cliente_consultar.html">Consultar</a>&emsp;
+            <a href="../html/cliente_atualizar.html">Atualizar</a>&emsp;
+            <a href="../html/cliente_apagar.html">Apagar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Consoles</span>&emsp;
+            <a href="../html/console_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/console_listar.html">Listar / Consultar</a>
+            <br><br><hr><br>
+
+            <span class="titulo_menu">Agendamentos</span>&emsp;
+            <a href="../html/agendamento_cadastrar.html">Cadastrar</a>&emsp;
+            <a href="../html/agendamento_listar.html">Listar</a>&emsp;
+            <a href="../html/agendamento_atualizar.html">Atualizar</a>
+            <br><br><hr><br>
+        </nav>
     </header>
     <main>
         <h1>Cadastrar Agendamento</h1>
+        <br><br>
         <form>
+            <label for="idCliente">Cliente</label><br>
+            <select id="idCliente"><option value="">Selecione o cliente</option></select><br><br>
+            <label for="idConsole">Console do cliente</label><br>
+            <select id="idConsole"><option value="">Selecione o console</option></select><br><br>
             <label for="data">Data</label><br>
             <input type="date" id="data" required><br><br>
-
             <label for="hora">Horário</label><br>
             <input type="time" id="hora" required><br><br>
-
-            <label for="tipoServico">Tipo de Serviço</label><br>
-            <input type="text" id="tipoServico" required><br><br>
-
-            <button id="btn_cadastrar">Cadastrar</button>
+            <button id="btn_cadastrar">Cadastrar</button><br><br><br>
         </form>
         <div id="resposta" class="resposta"></div>
     </main>

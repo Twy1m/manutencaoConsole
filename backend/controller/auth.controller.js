@@ -16,13 +16,14 @@ const login = async (req, res) => {
 
         const token = cryptoJs.AES.encrypt(
             JSON.stringify({
-                idCliente: cliente.idCliente,
+                idCliente: cliente.codCliente,
+                nome: cliente.nome,
                 expiraEm: tempoExpiracao
             }),
             "segredo"
         ).toString()
 
-        res.status(200).json({ token: token })
+        res.status(200).json({ token: token, nome: cliente.nome })
     } catch (error) {
         res.status(401).json({ message: "erro ao fazer login" })
     }
